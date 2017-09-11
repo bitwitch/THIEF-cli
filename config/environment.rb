@@ -1,6 +1,6 @@
 require 'bundler/setup'
 Bundler.require
-# require 'open-uri'
+require 'csv'
 
 require_relative '../app/models/gadget.rb'
 require_relative '../app/models/installed.rb'
