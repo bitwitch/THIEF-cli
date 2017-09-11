@@ -1,15 +1,4 @@
-class Gadget 
-	attr_reader :name
-	
-	ALL = []
-
-	def initialize(name)
-		@name = name
-		ALL << self
-	end
-
-	def self.all 
-		ALL 
-	end 
-
-end 
+class Gadget  < ActiveRecord::Base
+	has_many :solutions
+	has_many :obstacles, through: :solutions
+end

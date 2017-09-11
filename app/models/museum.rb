@@ -1,15 +1,15 @@
 class Museum
-	attr_reader :name
-	
+	attr_reader :name, :location
+
 	ALL = []
 
-	def initialize(name)
+	def initialize(name, location)
 		@name = name
 		ALL << self
 	end
 
-	def self.all 
-		ALL 
-	end 
+	def self.all
+		ALL
+	end
 
-end 	
+end
