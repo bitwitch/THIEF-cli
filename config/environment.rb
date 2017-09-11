@@ -3,7 +3,7 @@ Bundler.require
 require 'csv'
 
 require_relative '../app/models/gadget.rb'
-require_relative '../app/models/installed.rb'
+require_relative '../app/models/solution.rb'
 require_relative '../app/models/museum.rb'
 require_relative '../app/models/obstacle.rb'
 require_relative '../app/models/thief.rb'
@@ -14,5 +14,3 @@ DB = ActiveRecord::Base.establish_connection(
 	adapter: 'sqlite3',
 	database: 'db/museum.db'
 )
-
-

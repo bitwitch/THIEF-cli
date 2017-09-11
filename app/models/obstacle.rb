@@ -1,15 +1,4 @@
-class Obstacle 
-	attr_reader :name
-	
-	ALL = []
-
-	def initialize(name)
-		@name = name
-		ALL << self
-	end
-
-	def self.all 
-		ALL 
-	end 
-
-end 
+class Obstacle < ActiveRecord::Base
+	has_many :solutions
+	has_many :gadgets, through: :solutions
+end
