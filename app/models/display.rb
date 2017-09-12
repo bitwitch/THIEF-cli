@@ -1,29 +1,27 @@
 class Display
-	attr_accessor :gadgets, :obstacle
 	
-	ALL = []
+	GADGETS = [] 
+	OBSTACLES = []
 
-	def initialize
-		@gadgets = []
-		@obstacles = []
-		ALL << self
+	def self.add_gadget(gadget) 
+		GADGETS << gadget 
+	end 
+
+	def self.display_gadgets
+		puts "\nYou are carrying: "
+		GADGETS.each_with_index {|gadget, i| puts "#{i+1}. #{gadget.formatted_name}"}
+	end 
+
+	def self.add_obstacle(obstacle)
+		OBSTACLES << obstacle
 	end
 
-	def self.all 
-		ALL 
+	def self.obstacles 
+		OBSTACLES 
 	end 
 
-	def add_gadget(gadget) 
-		self.gadgets << gadget 
+	def self.gadgets 
+		GADGETS
 	end 
-
-	def display_gadgets
-		puts "You are carrying: "
-		gadgets.each_with_index {|gadget, i| puts "#{i+1}. #{gadget.name}"}
-	end 
-
-	def add_obstacle(obstacle)
-		self.obstacles << obstacle
-	end
 
 end 

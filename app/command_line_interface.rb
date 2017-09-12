@@ -15,8 +15,30 @@ end
 
 def choose_gadgets
 	puts "Select your gadgets:" 
-	Gadget.all.each_with_index {|gadget, i| puts "#{i+1}. #{gadget.name}"}
+	Gadget.all.each_with_index {|gadget, i| puts "#{i+1}. #{gadget.formatted_name}"}
 	puts " "
+end 
+
+def select_five_gadgets 
+	until Display.gadgets.length == 5 
+	selection = get_user_input
+
+		unless (1..9).to_a.include?(selection.to_i) 
+			puts "That's not on the list, are you sure you're up for this?\n\n"
+			enter_num
+			next 
+		end 
+
+		gadget = Gadget.all[selection.to_i-1]
+		if Display.gadgets.include?(gadget)
+			puts "You already have #{gadget.formatted_name}.\n\n"
+		else 
+			Display.add_gadget(gadget) 
+			puts "You selected: #{gadget.formatted_name}.\n\n"
+		end  
+	
+		print "ENTER A NUMBER TO SELECT YOUR NEXT GADGET: "
+	end  
 end 
 
 def enter_num 
@@ -24,24 +46,23 @@ def enter_num
 end 
 
 def entrypoint_description
-	string = "You find yourself standing in front of the illustrious Rijksmuseum. Its glorious facade towers before you. Your hair stands on end as you think about the invaluable masterpieces that lie within. Your adrenaline begins to surge, your body knows it is time for the heist. You examine the museum, assessing your entrypoints. "
+	string = "You find yourself standing in front of the illustrious Rijksmuseum. Its glorious facade towers before you. Your hair stands on end as you think about the invaluable masterpieces that lie within. Your adrenaline begins to surge, your body knows it is time for the heist. You examine the museum, assessing your entrypoints."
 	type(string)
-	type("\nThere is SCAFFOLDING on the left end of the building giving access to third floor windows. ")
+	type("\nThere is SCAFFOLDING on the left end of the building giving access to third floor windows.")
 end 
 
 def type(string)
-	sentences = string.split(". ")
+	sentences = string.split(".").compact
 	sentences.each do |string|
-		string.each_char do |c| 
+		string.strip.each_char do |c| 
 			print c 
-			sleep(0.025)
+			# sleep(0.025)
 		end
 		print "."
-		sleep(0.025)
+		# sleep(0.025)
 		puts " "
 	end	 
 end
-
 
 def get_entrypoint
 	puts "\nWhat's your move?"
@@ -56,23 +77,79 @@ def get_entrypoint
 end
 
 def scaffolding_entry 
-	string = "You head over to the scaffolding and start to ascend. The city lights of Amsterdam illuminate your path. An open window at the top gives easy access. You climb through the window landing on the hard parquet floor. "	
+	string = "You head over to the scaffolding and start to ascend. The city lights of Amsterdam illuminate your path. An open window at the top gives easy access. You climb through the window landing on the hard parquet floor."	
 	type(string)
+	sleep(0.5)
 	puts "WAIT!!!"
+	sleep(1)
 end
 
-def obstacle
+def get_obstacle
 	obstacle = Obstacle.all.sample
-	while display.obstacles.include?(obstacle)
+	while Display.obstacles.include?(obstacle)
 		obstacle = Obstacle.all.sample
+	end
+	Display.add_obstacle(obstacle)
+	CurrentObstacle.new(obstacle.id, obstacle.name, obstacle.brains, obstacle.brawn, obstacle.heart)
+	puts " "
+	type(obstacle.description) 
+	obstacle  
+end
+
+def select_gadget_for_obstacle 
+	input = "poo"
+	until valid?(input)
+		puts "\nChoose a gadget to deal with this obstacle."
+		puts "(Enter a number to select that gadget, or check your stash using GADGETS)"
+		input = get_user_input
+		Display.display_gadgets if input.downcase.split.include?("gadgets")
+
+	end 
+
+	Display.gadgets.delete_at(input.to_i-1)
+end 
+
+def valid?(input) 
+	# number or name of gadget are valid 
+	if (1..5).to_a.include?(input.to_i)
+		true 
+	elsif 5 > 6 #this will be where gadget name can be used as input  
+
+	else 
+		false 
+	end 
+end 
+
+def find_working_gadget(selection)
+	current_obstacle = CurrentObstacle.all.last
+	current_obstacle_id = CurrentObstacle.all.last.id
+	obstacle_solutions = Solution.all.select {|solution| solution.obstacle_id == current_obstacle_id}
+	solution_gadget = obstacle_solutions.find {|solution| solution.gadget_id == selection.id}
+	if solution_gadget != nil
+		gadget = Gadget.find(solution_gadget.gadget_id)
+		current_obstacle.brains -= gadget.brains
+		current_obstacle.brawn -= gadget.brawn
+		current_obstacle.heart -= gadget.heart
+	else
+		puts "That gadget can't be used here.\n"
 
 	end
+
+
+	# then search for a solution to the obstacle that has that gadget attribute 
+	# if it finds it (i.e. viable solution)
+		# update current obstacle points 
+		#until no points remain 
+				#ask for another gadget or use player stats 
+		# show solution description 
+	# else 
+	  # message: cannot be used for this obstacle 
+	  current_obstacle
+end 
+
+def obstacle_overcome?(obstacle)
+	obstacle.brains <= 0 && obstacle.brawn <= 0 && obstacle.heart <= 0 
 end
-
-
-
-
-
 
 
 def get_user_input 

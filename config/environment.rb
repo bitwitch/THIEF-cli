@@ -8,6 +8,7 @@ require_relative '../app/models/obstacle.rb'
 require_relative '../app/models/thief.rb'
 require_relative '../app/models/artwork.rb'
 require_relative '../app/models/display.rb'
+require_relative '../app/models/current_obstacle.rb'
 require_relative '../app/command_line_interface.rb'
 
 ActiveRecord::Base.logger = nil 

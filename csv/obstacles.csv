@@ -2,9 +2,9 @@ Obstacle,Brains,Brawn,Heart,Description
 laser_sensors,2,3,3,You freeze in your tracks as you notice laser emitters all over the room. The laser beams are undetectable with the naked eye.
 sleeping_security_guard,1,1,1,You see a sleeping security guard.
 patrolling_guard,1,3,2,You see a patrolling guard.
-aggro_guard,1,5,4,You see a really fucking pissed off, steroided out security guard.
-key_locked_door,3,2,1,Shit, it's a locked door.
-smart_locked_door,5,1,2,Shit, it's a locked door with beeps and boops.
+aggro_guard,1,5,4,You see a really fucking pissed off steroided out security guard.
+key_locked_door,3,2,1,Shit! it's a locked door.
+smart_locked_door,5,1,2,Shit! it's a locked door with beeps and boops.
 mainframe,5,1,5,You found the mainframe!
 artwork_alarm,4,1,2,You notice an alarm attached to the artwork.
 noise_sensor,3,2,2,You realize there are noise sensors all around.
