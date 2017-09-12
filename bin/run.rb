@@ -33,5 +33,8 @@ end
 
 system "clear"
 entrypoint_description 
+input = get_entrypoint
+system "clear"
+scaffolding_entry
 
 

@@ -5,6 +5,7 @@ class CreateObstaclesTable < ActiveRecord::Migration[5.1]
       t.integer :brains
       t.integer :brawn
       t.integer :heart
+      t.text :description
     end
   end
 end

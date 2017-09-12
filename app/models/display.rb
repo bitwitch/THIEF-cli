@@ -5,6 +5,7 @@ class Display
 
 	def initialize
 		@gadgets = []
+		@obstacles = []
 		ALL << self
 	end
 
@@ -20,5 +21,9 @@ class Display
 		puts "You are carrying: "
 		gadgets.each_with_index {|gadget, i| puts "#{i+1}. #{gadget.name}"}
 	end 
+
+	def add_obstacle(obstacle)
+		self.obstacles << obstacle
+	end
 
 end 
