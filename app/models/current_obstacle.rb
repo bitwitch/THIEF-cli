@@ -17,6 +17,10 @@ class CurrentObstacle
 		ALL 
 	end 
 
+	def formatted_name
+		self.name.split("_").map(&:capitalize).join(" ")
+	end 
+
 end 
 
 

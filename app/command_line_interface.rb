@@ -56,10 +56,10 @@ def type(string)
 	sentences.each do |string|
 		string.strip.each_char do |c| 
 			print c 
-			# sleep(0.025)
+			# sleep(0.025)     #######################
 		end
 		print "."
-		# sleep(0.025)
+		# sleep(0.025)       #######################
 		puts " "
 	end	 
 end
@@ -93,28 +93,29 @@ def get_obstacle
 	CurrentObstacle.new(obstacle.id, obstacle.name, obstacle.brains, obstacle.brawn, obstacle.heart)
 	puts " "
 	type(obstacle.description) 
+	sleep(1)
 	obstacle  
 end
 
 def select_gadget_for_obstacle 
 	input = "poo"
 	until valid?(input)
-		puts "\nChoose a gadget to deal with this obstacle."
-		puts "(Enter a number to select that gadget, or check your stash using GADGETS)"
+		puts "\nChoose a gadget to deal with this obstacle.\n"
+		sleep(1)
+		Display.display_gadgets 
+		print "\nENTER A NUMBER TO SELECT A GADGET: "
 		input = get_user_input
-		Display.display_gadgets if input.downcase.split.include?("gadgets")
-
 	end 
 
-	Display.gadgets.delete_at(input.to_i-1)
+	Display.gadgets[input.to_i-1]
+	# Display.gadgets.delete_at(input.to_i-1)
 end 
 
 def valid?(input) 
 	# number or name of gadget are valid 
 	if (1..5).to_a.include?(input.to_i)
 		true 
-	elsif 5 > 6 #this will be where gadget name can be used as input  
-
+	# elsif #this will be where gadget name can be used as input  
 	else 
 		false 
 	end 
@@ -125,25 +126,19 @@ def find_working_gadget(selection)
 	current_obstacle_id = CurrentObstacle.all.last.id
 	obstacle_solutions = Solution.all.select {|solution| solution.obstacle_id == current_obstacle_id}
 	solution_gadget = obstacle_solutions.find {|solution| solution.gadget_id == selection.id}
+
 	if solution_gadget != nil
 		gadget = Gadget.find(solution_gadget.gadget_id)
 		current_obstacle.brains -= gadget.brains
 		current_obstacle.brawn -= gadget.brawn
 		current_obstacle.heart -= gadget.heart
+		puts "You used: #{gadget.formatted_name}.\n"
+		Display.gadgets.delete(gadget) 
 	else
 		puts "That gadget can't be used here.\n"
-
+		sleep(0.025)
 	end
 
-
-	# then search for a solution to the obstacle that has that gadget attribute 
-	# if it finds it (i.e. viable solution)
-		# update current obstacle points 
-		#until no points remain 
-				#ask for another gadget or use player stats 
-		# show solution description 
-	# else 
-	  # message: cannot be used for this obstacle 
 	  current_obstacle
 end 
 
@@ -151,6 +146,56 @@ def obstacle_overcome?(obstacle)
 	obstacle.brains <= 0 && obstacle.brawn <= 0 && obstacle.heart <= 0 
 end
 
+def overcome_obstacle(obstacle, gadget)
+	obstacle_solutions = Solution.all.select {|solution| solution.obstacle_id == obstacle.id}
+	solution = obstacle_solutions.find {|solution| solution.gadget_id == gadget.id}
+	solution.description
+end 
+
+def enter_new_corridor(current_obstacle)
+	puts " "
+	string = "Safely past the #{current_obstacle.formatted_name}, you enter a beautiful corridor. There is art to your LEFT and to your RIGHT. The corridor extends FORWARD."
+	type(string)
+	puts "\nWhat is your move?"
+end
+
+def corridor
+	puts " "
+	string = "You are standing in a beautiful corridor. There is art to your LEFT and to your RIGHT. The corridor extends FORWARD."
+	type(string)
+	puts "\nWhat is your move?"
+end 
+
+def corridor_decision
+	corridor 
+	input = get_user_input
+	if input.downcase.split.include?("left")
+		corridor_left
+	elsif input.downcase.split.include?("right")
+		corridor_right
+	elsif !input.downcase.split.include?("forward")
+		corridor_invalid 
+	end 
+	input 
+end 
+
+def corridor_left 
+	art_left = Artwork.all.sample
+	url = art_left.image_url
+	a = AsciiArt.new(url)
+	puts a.to_ascii_art(color: true, width: 60)
+end 
+
+def corridor_right 
+	art_right = Artwork.all.sample
+	url = art_right.image_url
+	a = AsciiArt.new(url)
+	puts a.to_ascii_art(color: true, width: 60)
+end 
+
+def corridor_invalid
+	puts "Nope. LEFT, RIGHT, and FORWARD seem like viable options."
+end 
 
 def get_user_input 
 	gets.chomp
