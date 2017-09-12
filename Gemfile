@@ -7,6 +7,8 @@ gem 'sqlite3'
 gem 'easy_translate'
 gem 'json' 
 gem 'rest-client'
+gem 'rainbow'
+gem 'rmagick'
+gem 'asciiart'
 
-# image to ascii gem 
-
+	
