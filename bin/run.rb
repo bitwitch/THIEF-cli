@@ -22,7 +22,7 @@ scaffolding_entry
 
 # FIRST OBSTACLE 
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) && enough_base_stats?(thief, current_obstacle)
+unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -65,7 +65,7 @@ system "clear"
 
 # SECOND OBSTACLE
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) && enough_base_stats?(thief, current_obstacle)
+unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -108,7 +108,7 @@ system "clear"
 
 # THIRD OBSTACLE 
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) && enough_base_stats?(thief, current_obstacle)
+unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -151,7 +151,7 @@ system "clear"
 
 # FOURTH OBSTACLE 
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) && enough_base_stats?(thief, current_obstacle)
+unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -194,7 +194,7 @@ system "clear"
 
 # FIFTH OBSTACLE 
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) && enough_base_stats?(thief, current_obstacle)
+unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -217,28 +217,18 @@ sleep(1.5)
 system "clear"
 
 ###########
-#MILKMAID HALLWAY
-
+#MILKMAID HALLWAY 
+enter_milkmaid_gallery(current_obstacle)
+input = get_user_input 
+until input.downcase.split.include?("steal")
+	puts "\nNope. Do you wanna maybe STEAL \"The Milkmaid\"?"
+	input = get_user_input
+end 
+sleep(1.5) 
+system "clear"
+win_game
 ##############
 
-enter_new_corridor(current_obstacle)
-input = get_user_input 
-artwork_left = Artwork.all.sample 
-left_value = rand(20000..30000)
-artwork_right = Artwork.all.sample
-right_value = rand(20000..30000)
-
-if input.downcase.split.include?("left")
-	corridor_left(artwork_left, left_value)
-elsif input.downcase.split.include?("right")
-	corridor_right(artwork_right, right_value)
-end 
-
-until input.downcase.split.include?("forward")
-	input = corridor_decision(artwork_left, left_value, artwork_right, right_value)
-end 
-sleep(1.5)
-system "clear"
 
 
 

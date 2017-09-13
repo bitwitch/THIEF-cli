@@ -29,7 +29,6 @@ class Display
 	def self.steal(artwork, value)
 		@@artworks << artwork
 		@@value += value
-
 	end
 
 	def self.artworks 

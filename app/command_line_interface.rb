@@ -234,6 +234,25 @@ def enter_new_corridor(current_obstacle)
 	puts "\nWhat is your move?"
 end
 
+def display_milkmaid
+	milkmaid = Artwork.find_by(title: "The Milkmaid")
+	url = milkmaid.image_url
+	a = AsciiArt.new(url)
+	puts a.to_ascii_art(color: true, width: 60)
+	puts "#{milkmaid.title}, #{milkmaid.artist}"
+end 
+
+def enter_milkmaid_gallery(current_obstacle)
+	puts " "
+	string = "Safely past the #{current_obstacle.formatted_name}, you enter a spectacular and breathtaking gallery. The columns lining your path lead to a large and glorious wall at the end of the arcade. Hanging on the wall, bathed in magestic light, is the object of your desire: THE MILKMAID!"
+	type(string) 
+	sleep(1.5)
+	system "clear"
+	display_milkmaid
+	sleep(1)
+	puts "\nSTEAL \"The Milkmaid\"?"
+end 
+
 def corridor
 	puts " "
 	string = "You are standing in a beautiful corridor. There is art to your LEFT and to your RIGHT. The corridor extends FORWARD."
@@ -251,35 +270,46 @@ def corridor_decision(artwork_left, left_value, artwork_right, right_value)
 	elsif !input.downcase.split.include?("forward")
 		corridor_invalid 
 	end 
-	input 
+	input 	
 end 
 
 def corridor_left(artwork_left, value)
-	url = artwork_left.image_url
-	a = AsciiArt.new(url)
-	puts a.to_ascii_art(color: true, width: 60)
-	print "#{artwork_left.title}, #{artwork_left.artist}"
-	if artwork_left.date == 0 
-		puts " "
-	else
-		puts ", #{artwork_left.date}"
+	if Display.artworks.include?(artwork_left)
+		type("You already took the painting from this wall.")
+		sleep(0.5)
+	else 
+		url = artwork_left.image_url
+		a = AsciiArt.new(url)
+		puts a.to_ascii_art(color: true, width: 60)
+		print "#{artwork_left.title}, #{artwork_left.artist}"
+		if artwork_left.date == 0 
+			puts " "
+		else
+			puts ", #{artwork_left.date}"
+		end 
+		puts "Value: $#{value}\n\n"
+
+		steal_artwork(artwork_left, value)
 	end 
-	puts "Value: $#{value}\n\n"
-	steal_artwork(artwork_left, value)
 end 
 
 def corridor_right(artwork_right, value)
-	url = artwork_right.image_url
-	a = AsciiArt.new(url)
-	puts a.to_ascii_art(color: true, width: 60)
-	print "#{artwork_right.title}, #{artwork_right.artist}"
-	if artwork_right.date == 0 
-		puts " "
-	else
-		puts ", #{artwork_right.date}"
+	if Display.artworks.include?(artwork_right)
+		type("You already took the painting from this wall.")
+		sleep(0.5)
+	else 
+		url = artwork_right.image_url
+		a = AsciiArt.new(url)
+		puts a.to_ascii_art(color: true, width: 60)
+		print "#{artwork_right.title}, #{artwork_right.artist}"
+		if artwork_right.date == 0 
+			puts " "
+		else
+			puts ", #{artwork_right.date}"
+		end 
+		puts "Value: $#{value}\n\n"
+		steal_artwork(artwork_right, value)
 	end 
-	puts "Value: $#{value}\n\n"
-	steal_artwork(artwork_right, value)
 end 
 
 def corridor_invalid
@@ -333,9 +363,49 @@ def game_over(obstacle)
 	end
 end 
 
+def win_game
+	milkmaid = Artwork.find_by(title: "The Milkmaid")
+	Display.steal(milkmaid, 100000000000)
+	string = "You have stolen \"The Milkmaid\"!" 
+	string.each_char do |c|
+		print c 
+		sleep(0.025)
+	end 
+	puts " "
+	string = "You stole a total of $#{Display.value} worth of artwork from the Rijksmuseum, including:"
+		string.each_char do |c|
+		print c 
+		sleep(0.025)
+	end 
+	puts " "
+	sleep(1.3)
+	Display.artworks.each do |art| 
+		display(art)
+		puts "#{art.title}, #{art.artist}\n"
+		sleep(1.3)
+		system "clear"
+	end 
 
+	system "clear"
+	msg = "GAME OVER"
+	100.times do
+	  print "\r#{ msg }"
+	  sleep 0.5
+	  print "\r#{ ' ' * msg.size }"
+	  begin
+ 			Timeout::timeout(0.5) do
+    	return if gets.chomp
+  	end
+		rescue Timeout::Error
+		end
+	end
+end 
 
-
+def display(artwork)
+	url = artwork.image_url 
+	a = AsciiArt.new(url)
+	puts a.to_ascii_art(color: true, width: 60)
+end 
 
 def get_user_input 
 	gets.chomp
