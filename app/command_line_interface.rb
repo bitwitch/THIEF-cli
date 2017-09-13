@@ -124,7 +124,7 @@ def get_obstacle
 		obstacle = Obstacle.all.sample 
 	end
 	Display.add_obstacle(obstacle)
-	CurrentObstacle.new(obstacle.id, obstacle.name, obstacle.brains, obstacle.brawn, obstacle.heart)
+	CurrentObstacle.new(obstacle.id, obstacle.name, obstacle.brains, obstacle.brawn, obstacle.heart, obstacle.failure)
 	puts " "
 	type(obstacle.description) 
 	sleep(1)
@@ -318,13 +318,17 @@ def corridor_invalid
 end 
 
 def steal_artwork(artwork, value)
+	alarm_num = 2
 	puts "Attempt to STEAL \"#{artwork.title}\" or GO BACK TO CORRIDOR?"
 	input = get_user_input
 	while "poop"
 		if input.downcase.split.include?("steal") || input.downcase.split.include?("yes")
-			#call method for artwork alarm
-			Display.steal(artwork, value)
-			puts "You have stolen \"#{artwork.title}\". You have a total of $#{Display.value} in stolen artwork."
+			random_num = rand(1..2)
+			alarm_result = artwork_alarm(Thief.all.first) if random_num == alarm_num
+			if alarm_result == nil || alarm_result == true 
+				Display.steal(artwork, value)
+				puts "You have stolen \"#{artwork.title}\". You have a total of $#{Display.value} in stolen artwork."
+			end 
 			break
 		elsif input.downcase.split.include?("no") || input.downcase.split.include?("go") || input.downcase.split.include?("back") || input.downcase.split.include?("corridor")
 			#do nothing
@@ -336,8 +340,29 @@ def steal_artwork(artwork, value)
 	end
 end
 
-def artwork_alarm 
-	#trip alarm, random chance 
+def artwork_alarm(thief)
+    string = "You've set off an alarm! Type 'x' to disable the alarm."
+    type(string)
+    sleep(1.0)
+    counter = 9
+    9.times do
+      print "\r#{counter}"
+      print "\a"
+      sleep(0.25)
+      print "\r "
+      begin
+        Timeout::timeout(0.75) do
+        return true if STDIN.getch == "x"
+  		end
+      rescue Timeout::Error
+      end
+      counter -= 1
+    end
+    thief.brains -= 2
+    thief.brawn -= 2
+    thief.heart -= 2
+    puts "You couldn't disarm it in time. Luckily, there's no one around to hear it but you. The shame has taken its toll on your body, mind, and willpower."
+    false
 end 
 
 def game_over(obstacle)

@@ -1,15 +1,16 @@
 class CurrentObstacle
-	attr_reader :id, :name
+	attr_reader :id, :name, :failure
 	attr_accessor :brains, :brawn, :heart
 	
 	ALL = []
 
-	def initialize(id, name, brains, brawn, heart)
+	def initialize(id, name, brains, brawn, heart, failure)
 		@id = id
 		@name = name
 		@brains = brains
 		@brawn = brawn
 		@heart = heart
+		@failure = failure
 		ALL << self
 	end
 

@@ -71,6 +71,10 @@ if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, curren
 end 
 
 until obstacle_overcome?(current_obstacle)
+	if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, current_obstacle)
+		game_over(current_obstacle)
+		exit 
+	end 
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
@@ -122,6 +126,10 @@ if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, curren
 end 
 
 until obstacle_overcome?(current_obstacle)
+	if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, current_obstacle)
+		game_over(current_obstacle)
+		exit 
+	end 
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
@@ -173,6 +181,10 @@ if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, curren
 end 
 
 until obstacle_overcome?(current_obstacle)
+	if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, current_obstacle)
+		game_over(current_obstacle)
+		exit 
+	end 
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
@@ -224,6 +236,10 @@ if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, curren
 end 
 
 until obstacle_overcome?(current_obstacle)
+	if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, current_obstacle)
+		game_over(current_obstacle)
+		exit 
+	end 
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
