@@ -6,9 +6,9 @@ class Thief
 
 	def initialize(name)
 		@name   = name
-		@brains = 10 
-		@brawn  = 10 
-		@heart  = 10 
+		@brains = 7 
+		@brawn  = 7 
+		@heart  = 7 
 		ALL << self
 	end
 

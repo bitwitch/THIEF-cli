@@ -163,7 +163,8 @@ def enough_base_stats?(thief, obstacle)
 end 
 
 def valid?(input) 
-	if (1..5).to_a.include?(input.to_i)
+
+	if (1..Display.gadgets.length).to_a.include?(input.to_i)
 		true 
 	elsif input.downcase == "none"
 		true 
@@ -382,7 +383,7 @@ def win_game
 	Display.artworks.each do |art| 
 		display(art)
 		puts "#{art.title}, #{art.artist}\n"
-		sleep(1.3)
+		sleep(1.6)
 		system "clear"
 	end 
 

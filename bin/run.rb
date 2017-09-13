@@ -1,6 +1,7 @@
 require_relative '../config/environment'
 
 thief = Thief.new("Vince")
+milkmaid = Artwork.find_by(title: "The Milkmaid")
 
 system "clear"
 welcome 
@@ -22,17 +23,12 @@ scaffolding_entry
 
 # FIRST OBSTACLE 
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
-	game_over(current_obstacle)
-	exit 
-end 
-
 until obstacle_overcome?(current_obstacle)
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
 		use_base_stats(thief, current_obstacle)
-		overcome_using_base_stats
+		overcome_using_base_stats 
 		used_base_stats = true
 		break
 	else 
@@ -47,8 +43,12 @@ system "clear"
 enter_new_corridor(current_obstacle)
 input = get_user_input 
 artwork_left = Artwork.all.sample 
-left_value = rand(10000..20000)
+artwork_left = Artwork.all.sample  if artwork_left  == milkmaid || Display.artworks.include?(artwork_left)
+artwork_left = Artwork.all.sample  if artwork_left  == milkmaid || Display.artworks.include?(artwork_left)
 artwork_right = Artwork.all.sample
+artwork_right = Artwork.all.sample if artwork_right == milkmaid || Display.artworks.include?(artwork_right)
+artwork_right = Artwork.all.sample if artwork_right == milkmaid || Display.artworks.include?(artwork_right)
+left_value  = rand(10000..20000)
 right_value = rand(10000..20000)
 
 if input.downcase.split.include?("left")
@@ -65,7 +65,7 @@ system "clear"
 
 # SECOND OBSTACLE
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
+if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -74,10 +74,14 @@ until obstacle_overcome?(current_obstacle)
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
-		use_base_stats(thief, current_obstacle)
-		overcome_using_base_stats
-		used_base_stats = true
-		break
+		if enough_base_stats?(thief, current_obstacle)
+			use_base_stats(thief, current_obstacle)
+			overcome_using_base_stats
+			used_base_stats = true
+			break
+		else 
+			puts "You do not have enough skill, try something else."
+		end
 	else 
 		current_obstacle = find_working_gadget(selection) 
 	end 
@@ -88,10 +92,14 @@ sleep(1.5)
 system "clear"
 
 enter_new_corridor(current_obstacle)
-input = get_user_input 
+input = get_user_input  
 artwork_left = Artwork.all.sample 
-left_value = rand(20000..30000)
+artwork_left = Artwork.all.sample  if artwork_left  == milkmaid || Display.artworks.include?(artwork_left)
+artwork_left = Artwork.all.sample  if artwork_left  == milkmaid || Display.artworks.include?(artwork_left)
 artwork_right = Artwork.all.sample
+artwork_right = Artwork.all.sample if artwork_right == milkmaid || Display.artworks.include?(artwork_right)
+artwork_right = Artwork.all.sample if artwork_right == milkmaid || Display.artworks.include?(artwork_right)
+left_value  = rand(20000..30000)
 right_value = rand(20000..30000)
 
 if input.downcase.split.include?("left")
@@ -108,7 +116,7 @@ system "clear"
 
 # THIRD OBSTACLE 
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
+if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -117,10 +125,14 @@ until obstacle_overcome?(current_obstacle)
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
-		use_base_stats(thief, current_obstacle)
-		overcome_using_base_stats
-		used_base_stats = true
-		break
+		if enough_base_stats?(thief, current_obstacle)
+			use_base_stats(thief, current_obstacle)
+			overcome_using_base_stats
+			used_base_stats = true
+			break
+		else 
+			puts "You do not have enough skill, try something else."
+		end
 	else 
 		current_obstacle = find_working_gadget(selection) 
 	end 
@@ -133,9 +145,13 @@ system "clear"
 enter_new_corridor(current_obstacle)
 input = get_user_input 
 artwork_left = Artwork.all.sample 
-left_value = rand(20000..30000)
+artwork_left = Artwork.all.sample  if artwork_left  == milkmaid || Display.artworks.include?(artwork_left)
+artwork_left = Artwork.all.sample  if artwork_left  == milkmaid || Display.artworks.include?(artwork_left)
 artwork_right = Artwork.all.sample
-right_value = rand(20000..30000)
+artwork_right = Artwork.all.sample if artwork_right == milkmaid || Display.artworks.include?(artwork_right)
+artwork_right = Artwork.all.sample if artwork_right == milkmaid || Display.artworks.include?(artwork_right)
+left_value  = rand(30000..40000)
+right_value = rand(30000..40000)
 
 if input.downcase.split.include?("left")
 	corridor_left(artwork_left, left_value)
@@ -151,7 +167,7 @@ system "clear"
 
 # FOURTH OBSTACLE 
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
+if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -160,10 +176,14 @@ until obstacle_overcome?(current_obstacle)
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
-		use_base_stats(thief, current_obstacle)
-		overcome_using_base_stats
-		used_base_stats = true
-		break
+		if enough_base_stats?(thief, current_obstacle)
+			use_base_stats(thief, current_obstacle)
+			overcome_using_base_stats
+			used_base_stats = true
+			break
+		else 
+			puts "You do not have enough skill, try something else."
+		end
 	else 
 		current_obstacle = find_working_gadget(selection) 
 	end 
@@ -176,9 +196,13 @@ system "clear"
 enter_new_corridor(current_obstacle)
 input = get_user_input 
 artwork_left = Artwork.all.sample 
-left_value = rand(20000..30000)
+artwork_left = Artwork.all.sample  if artwork_left  == milkmaid || Display.artworks.include?(artwork_left)
+artwork_left = Artwork.all.sample  if artwork_left  == milkmaid || Display.artworks.include?(artwork_left)
 artwork_right = Artwork.all.sample
-right_value = rand(20000..30000)
+artwork_right = Artwork.all.sample if artwork_right == milkmaid || Display.artworks.include?(artwork_right)
+artwork_right = Artwork.all.sample if artwork_right == milkmaid || Display.artworks.include?(artwork_right)
+left_value  = rand(40000..50000)
+right_value = rand(40000..50000)
 
 if input.downcase.split.include?("left")
 	corridor_left(artwork_left, left_value)
@@ -194,7 +218,7 @@ system "clear"
 
 # FIFTH OBSTACLE 
 current_obstacle = get_obstacle 
-unless any_gadget_solutions?(current_obstacle) || enough_base_stats?(thief, current_obstacle)
+if !any_gadget_solutions?(current_obstacle) && !enough_base_stats?(thief, current_obstacle)
 	game_over(current_obstacle)
 	exit 
 end 
@@ -203,10 +227,14 @@ until obstacle_overcome?(current_obstacle)
 	used_base_stats = false 
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
-		use_base_stats(thief, current_obstacle)
-		overcome_using_base_stats
-		used_base_stats = true
-		break
+		if enough_base_stats?(thief, current_obstacle)
+			use_base_stats(thief, current_obstacle)
+			overcome_using_base_stats
+			used_base_stats = true
+			break
+		else 
+			puts "You do not have enough skill, try something else."
+		end
 	else 
 		current_obstacle = find_working_gadget(selection) 
 	end 
