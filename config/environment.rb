@@ -2,6 +2,7 @@ require 'bundler/setup'
 Bundler.require
 require 'csv'
 require 'open-uri'
+require 'timeout'
 require_relative '../app/models/gadget.rb'
 require_relative '../app/models/solution.rb'
 require_relative '../app/models/obstacle.rb'

@@ -9,14 +9,48 @@ def display_museum
 end 
 
 def context 
-	puts "Amsterdam. 2005. The Rijksmuseum is undergoing major renovations. Giving you, Vince Peruggi, international art thief extraordinaire, a golden opportunity.\n\n"
+	string = "Amsterdam. 2005. The Rijksmuseum is undergoing major renovations. Giving you, Vince Peruggi, international art thief extraordinaire, a golden opportunity.\n\n"
+	string.each_char do |c| 
+		print c 
+		sleep(0.030)
+	end
+	puts " "
+	"Prepare for: ".each_char do |c| 
+			print c 
+			sleep(0.035)
+		end
+	"THE MILKMAID HIEST\n".each_char do |c| 
+		print c 
+		sleep(0.12)
+	end 
 end
 
+def enter_to_begin 
+	msg = "PRESS ENTER TO BEGIN"
+
+	100.times do
+	  print "\r#{ msg }"
+	  sleep 0.5
+	  print "\r#{ ' ' * msg.size }" # Send return and however many spaces are needed.
+	  begin
+ 			Timeout::timeout(0.5) do
+    	return if gets.chomp
+  	end
+		rescue Timeout::Error
+		end
+	end
+end 
 
 def choose_gadgets
+	puts " "
+	"Hiest preparation".each_char do |c| 
+		print c 
+		sleep(0.025)
+	end 
+	puts "\n-------------------------------------------"
 	puts "Select your gadgets:" 
 	Gadget.all.each_with_index {|gadget, i| puts "#{i+1}. #{gadget.formatted_name}"}
-	puts " "
+	puts "-------------------------------------------\n\n"
 end 
 
 def select_five_gadgets 
@@ -114,11 +148,9 @@ def select_gadget_for_obstacle
 	else 
 		Display.gadgets[input.to_i-1]
 	end 
-	# Display.gadgets.delete_at(input.to_i-1)
 end 
 
 def valid?(input) 
-	# number or name of gadget are valid 
 	if (1..5).to_a.include?(input.to_i)
 		true 
 	elsif input.downcase == "none"
@@ -179,29 +211,33 @@ def corridor
 	puts "\nWhat is your move?"
 end 
 
-def corridor_decision(artwork_left, artwork_right)
+def corridor_decision(artwork_left, left_value, artwork_right, right_value)
 	corridor 
 	input = get_user_input
 	if input.downcase.split.include?("left")
-		corridor_left(artwork_left)
+		corridor_left(artwork_left, left_value)
 	elsif input.downcase.split.include?("right")
-		corridor_right(artwork_right)
+		corridor_right(artwork_right, right_value)
 	elsif !input.downcase.split.include?("forward")
 		corridor_invalid 
 	end 
 	input 
 end 
 
-def corridor_left(artwork_left)
+def corridor_left(artwork_left, value)
 	url = artwork_left.image_url
 	a = AsciiArt.new(url)
 	puts a.to_ascii_art(color: true, width: 60)
+	puts "#{artwork_left.title}, #{artwork_left.artist}, #{artwork_left.date}"
+	puts "Value: $#{value}"
 end 
 
-def corridor_right(artwork_right)
+def corridor_right(artwork_right, value)
 	url = artwork_right.image_url
 	a = AsciiArt.new(url)
 	puts a.to_ascii_art(color: true, width: 60)
+	puts "#{artwork_right.title}, #{artwork_right.artist}, #{artwork_right.date}"
+	puts "Value: $#{value}"
 end 
 
 def corridor_invalid
