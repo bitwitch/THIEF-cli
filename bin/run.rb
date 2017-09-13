@@ -25,9 +25,11 @@ until obstacle_overcome?(current_obstacle)
 	selection = select_gadget_for_obstacle 
 	if selection.is_a?(String) && selection.downcase == "none"
 		use_base_stats(thief, current_obstacle)
+		overcome_using_base_stats
 		break
 	else 
 		current_obstacle = find_working_gadget(selection) 
+		overcome_obstacle(current_obstacle, selection)
 	end 
 end 
 

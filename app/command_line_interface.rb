@@ -19,7 +19,7 @@ def context
 			print c 
 			sleep(0.035)
 		end
-	"THE MILKMAID HIEST\n".each_char do |c| 
+	"THE MILKMAID HEIST\n".each_char do |c| 
 		print c 
 		sleep(0.12)
 	end 
@@ -43,7 +43,7 @@ end
 
 def choose_gadgets
 	puts " "
-	"Hiest preparation".each_char do |c| 
+	"Heist preparation".each_char do |c| 
 		print c 
 		sleep(0.025)
 	end 
@@ -194,7 +194,11 @@ end
 def overcome_obstacle(obstacle, gadget)
 	obstacle_solutions = Solution.all.select {|solution| solution.obstacle_id == obstacle.id}
 	solution = obstacle_solutions.find {|solution| solution.gadget_id == gadget.id}
-	solution.description
+	puts solution.description
+end 
+
+def overcome_using_base_stats
+	puts "Your skills as a thief prove worthy. Your efforts, however, have taken a toll on your body, mind, and willpower."
 end 
 
 def enter_new_corridor(current_obstacle)
@@ -228,7 +232,12 @@ def corridor_left(artwork_left, value)
 	url = artwork_left.image_url
 	a = AsciiArt.new(url)
 	puts a.to_ascii_art(color: true, width: 60)
-	puts "#{artwork_left.title}, #{artwork_left.artist}, #{artwork_left.date}"
+	print "#{artwork_left.title}, #{artwork_left.artist}"
+	if artwork_left.date == 0 
+		puts " "
+	else
+		puts ", #{artwork_left.date}"
+	end 
 	puts "Value: $#{value}"
 end 
 
@@ -236,7 +245,12 @@ def corridor_right(artwork_right, value)
 	url = artwork_right.image_url
 	a = AsciiArt.new(url)
 	puts a.to_ascii_art(color: true, width: 60)
-	puts "#{artwork_right.title}, #{artwork_right.artist}, #{artwork_right.date}"
+	print "#{artwork_right.title}, #{artwork_right.artist}"
+	if artwork_right.date == 0 
+		puts " "
+	else
+		puts ", #{artwork_right.date}"
+	end 
 	puts "Value: $#{value}"
 end 
 
