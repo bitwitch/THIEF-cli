@@ -12,16 +12,16 @@ def context
 	string = "Amsterdam. 2005. The Rijksmuseum is undergoing major renovations. Giving you, Vince Peruggi, international art thief extraordinaire, a golden opportunity.\n\n"
 	string.each_char do |c| 
 		print c 
-		sleep(0.030)
+		# sleep(0.030)########################################################################
 	end
 	puts " "
 	"Prepare for: ".each_char do |c| 
 			print c 
-			sleep(0.035)
+			# sleep(0.035)########################################################################
 		end
 	"THE MILKMAID HEIST\n".each_char do |c| 
 		print c 
-		sleep(0.12)
+		# sleep(0.12)######################################################################## 
 	end 
 end
 
@@ -31,7 +31,7 @@ def enter_to_begin
 	100.times do
 	  print "\r#{ msg }"
 	  sleep 0.5
-	  print "\r#{ ' ' * msg.size }" # Send return and however many spaces are needed.
+	  print "\r#{ ' ' * msg.size }"
 	  begin
  			Timeout::timeout(0.5) do
     	return if gets.chomp
@@ -45,7 +45,7 @@ def choose_gadgets
 	puts " "
 	"Heist preparation".each_char do |c| 
 		print c 
-		sleep(0.025)
+		# sleep(0.025)########################################################################
 	end 
 	puts "\n-------------------------------------------"
 	puts "Select your gadgets:" 
@@ -150,6 +150,18 @@ def select_gadget_for_obstacle
 	end 
 end 
 
+def any_gadget_solutions?(obstacle)
+	gadget_solutions = Solution.all.select {|sol| sol.obstacle_id == obstacle.id}
+	solution_gadget_ids = gadget_solutions.map(&:gadget_id)
+	thief_gadget_ids = Display.gadgets.map(&:id)
+
+	!(solution_gadget_ids & thief_gadget_ids).empty?
+end 
+
+def enough_base_stats?(thief, obstacle) 
+	obstacle.brains <= thief.brains && obstacle.brawn <= thief.brawn && obstacle.heart <= thief.heart
+end 
+
 def valid?(input) 
 	if (1..5).to_a.include?(input.to_i)
 		true 
@@ -173,6 +185,9 @@ def find_working_gadget(selection)
 		current_obstacle.heart -= gadget.heart
 		puts "You used: #{gadget.formatted_name}.\n"
 		Display.gadgets.delete(gadget) 
+		if obstacle_overcome?(current_obstacle) == false
+			puts "The #{gadget.formatted_name} has some effect, but is not enough.\n"
+		end
 	else
 		puts "That gadget can't be used here.\n"
 		sleep(0.005)
@@ -194,11 +209,22 @@ end
 def overcome_obstacle(obstacle, gadget)
 	obstacle_solutions = Solution.all.select {|solution| solution.obstacle_id == obstacle.id}
 	solution = obstacle_solutions.find {|solution| solution.gadget_id == gadget.id}
-	puts solution.description
+	if solution != nil 
+		string = solution.description 
+		string.each_char do |c|
+			print c
+			sleep(0.025)
+		end
+	end
+	puts " "
 end 
 
 def overcome_using_base_stats
-	puts "Your skills as a thief prove worthy. Your efforts, however, have taken a toll on your body, mind, and willpower."
+	string = "Your skills as a thief prove worthy. Your efforts, however, have taken a toll on your body, mind, and willpower."
+	string.each_char do |c|
+		print c
+		sleep(0.025)
+	end
 end 
 
 def enter_new_corridor(current_obstacle)
@@ -238,7 +264,8 @@ def corridor_left(artwork_left, value)
 	else
 		puts ", #{artwork_left.date}"
 	end 
-	puts "Value: $#{value}"
+	puts "Value: $#{value}\n\n"
+	steal_artwork(artwork_left, value)
 end 
 
 def corridor_right(artwork_right, value)
@@ -251,12 +278,64 @@ def corridor_right(artwork_right, value)
 	else
 		puts ", #{artwork_right.date}"
 	end 
-	puts "Value: $#{value}"
+	puts "Value: $#{value}\n\n"
+	steal_artwork(artwork_right, value)
 end 
 
 def corridor_invalid
 	puts "Nope. LEFT, RIGHT, and FORWARD seem like viable options."
 end 
+
+def steal_artwork(artwork, value)
+	puts "Attempt to STEAL \"#{artwork.title}\" or GO BACK TO CORRIDOR?"
+	input = get_user_input
+	while "poop"
+		if input.downcase.split.include?("steal") || input.downcase.split.include?("yes")
+			#call method for artwork alarm
+			Display.steal(artwork, value)
+			puts "You have stolen \"#{artwork.title}\". You have a total of $#{Display.value} in stolen artwork."
+			break
+		elsif input.downcase.split.include?("no") || input.downcase.split.include?("go") || input.downcase.split.include?("back") || input.downcase.split.include?("corridor")
+			#do nothing
+			break
+		else
+			puts "Nope, but maybe you want to STEAL or GO BACK TO CORRIDOR?"
+			input = get_user_input	
+		end
+	end
+end
+
+def artwork_alarm 
+	#trip alarm, random chance 
+end 
+
+def game_over(obstacle)
+	sleep(2)
+	system "clear"
+	string = "#{obstacle.failure} Your thieving skills were no match for your insatiable greed. You lost $#{Display.value} in stolen artwork."
+	string.each_char do |c| 
+		print c 
+		sleep(0.025)
+	end
+
+	puts "  "
+	msg = "GAME OVER"
+	100.times do
+	  print "\r#{ msg }"
+	  sleep 0.5
+	  print "\r#{ ' ' * msg.size }"
+	  begin
+ 			Timeout::timeout(0.5) do
+    	return if gets.chomp
+  	end
+		rescue Timeout::Error
+		end
+	end
+end 
+
+
+
+
 
 def get_user_input 
 	gets.chomp
