@@ -87,7 +87,7 @@ end
 def get_obstacle
 	obstacle = Obstacle.all.sample
 	while Display.obstacles.include?(obstacle)
-		obstacle = Obstacle.all.sample
+		obstacle = Obstacle.all.sample 
 	end
 	Display.add_obstacle(obstacle)
 	CurrentObstacle.new(obstacle.id, obstacle.name, obstacle.brains, obstacle.brawn, obstacle.heart)
@@ -101,13 +101,19 @@ def select_gadget_for_obstacle
 	input = "poo"
 	until valid?(input)
 		puts "\nChoose a gadget to deal with this obstacle.\n"
-		sleep(1)
+		sleep(0.25)
 		Display.display_gadgets 
-		print "\nENTER A NUMBER TO SELECT A GADGET: "
+		puts "\nENTER A NUMBER TO SELECT A GADGET"
+		puts "or"
+		print "ENTER 'NONE' TO RELY ON YOUR OWN SKILL: "
 		input = get_user_input
 	end 
 
-	Display.gadgets[input.to_i-1]
+	if input.downcase == "none"
+		input.downcase
+	else 
+		Display.gadgets[input.to_i-1]
+	end 
 	# Display.gadgets.delete_at(input.to_i-1)
 end 
 
@@ -115,7 +121,8 @@ def valid?(input)
 	# number or name of gadget are valid 
 	if (1..5).to_a.include?(input.to_i)
 		true 
-	# elsif #this will be where gadget name can be used as input  
+	elsif input.downcase == "none"
+		true 
 	else 
 		false 
 	end 
@@ -136,11 +143,17 @@ def find_working_gadget(selection)
 		Display.gadgets.delete(gadget) 
 	else
 		puts "That gadget can't be used here.\n"
-		sleep(0.025)
+		sleep(0.005)
 	end
 
 	  current_obstacle
 end 
+
+def use_base_stats(thief, obstacle)
+	thief.brains -= obstacle.brains
+	thief.brawn -= obstacle.brawn
+	thief.heart -= obstacle.heart
+end
 
 def obstacle_overcome?(obstacle)
 	obstacle.brains <= 0 && obstacle.brawn <= 0 && obstacle.heart <= 0 
@@ -166,29 +179,27 @@ def corridor
 	puts "\nWhat is your move?"
 end 
 
-def corridor_decision
+def corridor_decision(artwork_left, artwork_right)
 	corridor 
 	input = get_user_input
 	if input.downcase.split.include?("left")
-		corridor_left
+		corridor_left(artwork_left)
 	elsif input.downcase.split.include?("right")
-		corridor_right
+		corridor_right(artwork_right)
 	elsif !input.downcase.split.include?("forward")
 		corridor_invalid 
 	end 
 	input 
 end 
 
-def corridor_left 
-	art_left = Artwork.all.sample
-	url = art_left.image_url
+def corridor_left(artwork_left)
+	url = artwork_left.image_url
 	a = AsciiArt.new(url)
 	puts a.to_ascii_art(color: true, width: 60)
 end 
 
-def corridor_right 
-	art_right = Artwork.all.sample
-	url = art_right.image_url
+def corridor_right(artwork_right)
+	url = artwork_right.image_url
 	a = AsciiArt.new(url)
 	puts a.to_ascii_art(color: true, width: 60)
 end 

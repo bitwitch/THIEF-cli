@@ -19,20 +19,28 @@ current_obstacle = get_obstacle
 
 until obstacle_overcome?(current_obstacle)
 	selection = select_gadget_for_obstacle 
-	current_obstacle = find_working_gadget(selection) 
+	if selection.is_a?(String) && selection.downcase == "none"
+		use_base_stats(thief, current_obstacle)
+		break
+	else 
+		current_obstacle = find_working_gadget(selection) 
+	end 
 end 
-puts overcome_obstacle(current_obstacle, selection) 
 
-enter_new_corridor(current_obstacle) 
+enter_new_corridor(current_obstacle)
 input = get_user_input 
+artwork_left = Artwork.all.sample 
+artwork_right = Artwork.all.sample
+
 if input.downcase.split.include?("left")
-	corridor_left
+	corridor_left(artwork_left)
 elsif input.downcase.split.include?("right")
-	corridor_right
+	corridor_right(artwork_right)
 end 
 
 until input.downcase.split.include?("forward")
-	input = corridor_decision
+	input = corridor_decision(artwork_left, artwork_right)
 end 
+
 
 
