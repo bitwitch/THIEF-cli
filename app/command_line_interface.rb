@@ -12,16 +12,16 @@ def context
 	string = "Amsterdam. 2005. The Rijksmuseum is undergoing major renovations. Giving you, Vince Peruggi, international art thief extraordinaire, a golden opportunity.\n\n"
 	string.each_char do |c| 
 		print c 
-		# sleep(0.030)########################################################################
+		sleep(0.030)#######################
 	end
 	puts " "
 	"Prepare for: ".each_char do |c| 
 			print c 
-			# sleep(0.035)########################################################################
+			sleep(0.035)########################
 		end
 	"THE MILKMAID HEIST\n".each_char do |c| 
 		print c 
-		# sleep(0.12)######################################################################## 
+		sleep(0.12)######################
 	end 
 end
 
@@ -45,7 +45,7 @@ def choose_gadgets
 	puts " "
 	"Heist preparation".each_char do |c| 
 		print c 
-		# sleep(0.025)########################################################################
+		sleep(0.025)#########################
 	end 
 	puts "\n-------------------------------------------"
 	puts "Select your gadgets:" 
@@ -90,10 +90,10 @@ def type(string)
 	sentences.each do |string|
 		string.strip.each_char do |c| 
 			print c 
-			# sleep(0.025)     #######################
+			sleep(0.025)     #######################
 		end
 		print "."
-		# sleep(0.025)       #######################
+		sleep(0.025)       #######################
 		puts " "
 	end	 
 end
@@ -247,7 +247,7 @@ def enter_milkmaid_gallery(current_obstacle)
 	puts " "
 	string = "Safely past the #{current_obstacle.formatted_name}, you enter a spectacular and breathtaking gallery. The columns lining your path lead to a large and glorious wall at the end of the arcade. Hanging on the wall, bathed in magestic light, is the object of your desire: THE MILKMAID!"
 	type(string) 
-	sleep(1.5)
+	sleep(2.5)
 	system "clear"
 	display_milkmaid
 	sleep(1)
