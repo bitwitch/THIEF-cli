@@ -20,7 +20,8 @@ CSV.foreach("csv/obstacles.csv").with_index do |row, i|
       brains: row[1],
       brawn: row[2],
       heart: row[3],
-      description: row[4]
+      description: row[4],
+      failure: row[5]
     }
     Obstacle.create(attrs)
   end

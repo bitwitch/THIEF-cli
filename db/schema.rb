@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20170911212402) do
     t.integer "brawn"
     t.integer "heart"
     t.text "description"
+    t.text "failure"
   end
 
   create_table "solutions", force: :cascade do |t|
